@@ -28,53 +28,71 @@ var fightOrSkip = function() {
 }
 
 var fight = function(enemy) {
+
+    // keep track of who goes first
+    var isPlayerTurn = true;
+
+    if (Math.random() > 0.5) {
+        debugger;
+        isPlayerTurn = false;
+        debugger;
+    } 
+
+    debugger;
+    //console.log(isPlayerTurn);
+
     // repeat and execute as long as the enemy robot is alive 
     while (playerInfo.health > 0 && enemy.health > 0) {
-        // ask user if they'd like to fight or skip using fightOrSkip function
-        if (fightOrSkip()) {
-            // if true, leave fight by breaking loop
-            break;
-        }
+        if (isPlayerTurn) {
+            // ask user if they'd like to fight or skip using fightOrSkip function
+            if (fightOrSkip()) {
+                // if true, leave fight by breaking loop
+                break;
+            }
+            
+            var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
         
-        var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
-    
-        // remove enemy's health by subtracting the amount set in the playerInfo.attack variable
-        // generate random damage value based on player's attack power
-        var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
+            // remove enemy's health by subtracting the amount set in the playerInfo.attack variable
+            // generate random damage value based on player's attack power
+            var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
 
-        enemy.health = Math.max(0, enemy.health - damage);
-        window.alert(playerInfo.name + ' attacked ' + enemy.name + '. ' + enemy.name + ' now has ' + enemy.health + ' health remaining.');
-    
-        // check enemy's health
-        if (enemy.health <= 0) {
-            window.alert(enemy.name + ' has died!');
+            enemy.health = Math.max(0, enemy.health - damage);
+            window.alert(playerInfo.name + ' attacked ' + enemy.name + '. ' + enemy.name + ' now has ' + enemy.health + ' health remaining.');
+        
+            // check enemy's health
+            if (enemy.health <= 0) {
+                window.alert(enemy.name + ' has died!');
 
-            // award player money for winning
-            playerInfo.money = playerInfo.money + 20;
+                // award player money for winning
+                playerInfo.money = playerInfo.money + 20;
+        
+                // leave while() loop since enemy is dead
+                break;
+            }   
+            else {
+                //window.alert(enemy.name + ' still has ' + enemy.health + ' health left.');
+            }
     
-            // leave while() loop since enemy is dead
-            break;
-        }   
-        else {
-            //window.alert(enemy.name + ' still has ' + enemy.health + ' health left.');
+        // player gets attacked first
+        } else {
+            var damage = randomNumber(enemy.attack - 3, enemy.attack);
+
+            playerInfo.health = Math.max(0, playerInfo.health - damage);
+            window.alert(enemy.name + ' attacked ' + playerInfo.name + '. ' + playerInfo.name + ' now has ' + playerInfo.health + ' health remaining.');
+        
+            // check player's health
+            if (playerInfo.health <= 0) {
+                window.alert(playerInfo.name + ' has died!');
+                // leave while() loop if player is dead
+                break;
+            } 
+            else {
+                //window.alert(playerInfo.name + ' still has ' + playerInfo.health + ' health left.');
+            }
         }
-    
-        // remove players's health by subtracting the amount set in the enemy.attack variable
-        // generate random damage value based on enemy's attack power
-        var damage = randomNumber(enemy.attack - 3, enemy.attack);
-
-        playerInfo.health = Math.max(0, playerInfo.health - damage);
-        window.alert(enemy.name + ' attacked ' + playerInfo.name + '. ' + playerInfo.name + ' now has ' + playerInfo.health + ' health remaining.');
-    
-        // check player's health
-        if (playerInfo.health <= 0) {
-            window.alert(playerInfo.name + ' has died!');
-            // leave while() loop if player is dead
-            break;
-        } 
-        else {
-            //window.alert(playerInfo.name + ' still has ' + playerInfo.health + ' health left.');
-        }
+        // switch turn order for next round
+        isPlayerTurn = !isPlayerTurn;
+        debugger;
     }
 };
 
@@ -84,7 +102,7 @@ var startGame = function() {
 
 
     for(var i = 0; i < enemyInfo.length; i++) {
-        debugger;
+        //debugger;
         if (playerInfo.health > 0) {
             // let user know what round they are in, remember that arrays start at 0 so it needs to have 1 added to it
             window.alert("Welcome to Robot Gladiators! Round " + (i + 1));
@@ -151,32 +169,23 @@ var shop = function() {
 
     // ask player what they'd like to do
     var shopOptionPrompt = window.prompt(
-        "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one: 'REFILL', 'UPGRADE', or 'LEAVE' to make a choice."
+        "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one 1 for REFILL, 2 for UPGRADE, or 3 for LEAVE."
     );
 
-    shopOptionPrompt = shopOptionPrompt.toLowerCase();
-
-    // use switch to carry out action
+    shopOptionPrompt = parseInt(shopOptionPrompt);
+    // use switch case to carry out action
     switch (shopOptionPrompt) {
-
-        case "refill":
+        case 1:
             playerInfo.refillHealth();
             break;
-
-        case "upgrade":
+        case 2:
             playerInfo.upgradeAttack();
             break;
-
-        case "leave":
+        case 3:
             window.alert("Leaving the store.");
-    
-            // do nothing, so function will end
             break;
-
         default:
             window.alert("You did not pick a valid option. Try again.");
-    
-            // call shop() again to force player to pick a valid option
             shop();
             break;
     }
