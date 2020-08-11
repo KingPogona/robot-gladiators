@@ -33,12 +33,12 @@ var fight = function(enemy) {
     var isPlayerTurn = true;
 
     if (Math.random() > 0.5) {
-        debugger;
+        //debugger;
         isPlayerTurn = false;
-        debugger;
+        //debugger;
     } 
 
-    debugger;
+    //debugger;
     //console.log(isPlayerTurn);
 
     // repeat and execute as long as the enemy robot is alive 
@@ -92,7 +92,7 @@ var fight = function(enemy) {
         }
         // switch turn order for next round
         isPlayerTurn = !isPlayerTurn;
-        debugger;
+        //debugger;
     }
 };
 
